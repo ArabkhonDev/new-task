@@ -18,8 +18,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         'posts'=> PostController::class,
         'comments'=>CommentController::class
     ]);
-
 });
+
+Route::get('/posts', [PostController::class,'index'])->name('posts.index');
+Route::get('posts/{post}', [PostController::class,'show'])->name('posts.show');
+Route::get('/comments', [CommentController::class,'index'])->name('comments.index');
 
 // Route::get('/admin', function () {
 //     return "Admin Panel";

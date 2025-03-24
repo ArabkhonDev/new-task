@@ -31,34 +31,40 @@
   </style>
 </head>
 
-<body>
-  <div class="max-w-md mx-auto p-8 bg-gray-800 rounded-md shadow-md form-container">
-    <h2 class="text-2xl font-semibold text-white mb-6">Say Something!</h2>
-    <form action="https://fabform.io/f/insert-form-id" method="POST">
-      <div class="mb-4">
-        <label for="name" class="block text-gray-300 text-sm font-bold mb-2">Your Name</label>
-        <input type="text" id="name" name="name" placeholder="John Doe" required
-          class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500 bg-gray-700 text-white">
-      </div>
-      <div class="mb-4">
-        <label for="email" class="block text-gray-300 text-sm font-bold mb-2">Your Email</label>
-        <input type="email" id="email" name="email" placeholder="john@example.com" required
-          class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500 bg-gray-700 text-white">
-      </div>
-      <div class="mb-6">
-        <label for="message" class="block text-gray-300 text-sm font-bold mb-2">Your Message</label>
-        <textarea id="message" name="message" rows="4" placeholder="How can we help you?" required
-          class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500 bg-gray-700 text-white"></textarea>
-      </div>
-      <button type="submit"
-        class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue">
-        Send Message
-      </button>
-      <p class="mt-5 text-gray-300">If you are not a fan of forms you can email us instead <a
-          class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-          href="https://veilmail.io/e/FkKh7o">https://veilmail.io/e/FkKh7o</a></p>
+  <div class="max-w-md mx-auto p-8 bg-gray-800 rounded-md shadow-md form-container mt-10">
+    <h2 class="text-2xl font-semibold text-white mb-6">Yangilik yarating</h2>
+    <form action="{{route('posts.update')}}" method="POST" enctype="multipart/form-data">
+      @csrf
+        <div class="mb-4">
+            <label for="name" class="block text-gray-300 text-sm font-bold mb-2">Title </label>
+            <input type="text" id="name" name="title"placeholder="John Doe" value="{{$post->title}}" required
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500 bg-gray-700 text-white">
+            @error('title')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="mb-6">
+            <label for="message" class="block text-gray-300 text-sm font-bold mb-2">To'liq tasnif </label>
+            <textarea id="message" name="body" rows="4" placeholder="{{$post->body}}"  required
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500 bg-gray-700 text-white"></textarea>
+            @error('body')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="mb-4">
+            <label for="file" class="block text-gray-300 text-sm font-bold mb-2">Rasmi </label>
+            <input type="file" id="name" name="photo"placeholder="photo" value="{{$post->photo}}" required
+                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500 bg-gray-700 text-white">
+            @error('photo')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+        <button type="submit"
+            class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue">
+            Updated
+        </button>
     </form>
-  </div>
-</body>
+</div>
 
 </html>

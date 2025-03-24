@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePostRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::orderBy("created_at","desc")->cursorPaginate(5);
-        return view('posts.index')->with(['posts'=> $posts]);
+        $posts = Post::orderBy("created_at", "desc")->simplePaginate(5);
+        return view('posts.index')->with(['posts' => $posts]);
     }
 
     public function create()
@@ -19,54 +20,71 @@ class PostController extends Controller
         return view('posts.create');
     }
 
-    public function store(StorePostRequest $request)
+    public function store(Request $request)
     {
-        dd($request);
+        if ($request->hasFile('photo')) {
+            $name = $request->file('photo')->getClientOriginalName();
+            $path = $request->file('photo')->storeAs('post-photos', $name);
+        }
 
         $post = Post::create([
-            'title'=> $request->title,
-            'content'=> $request->content,
-            'user_id'=> auth()->user()->id,
-            'photo'=> $request->photo ?? null,
+            'title' => $request->title,
+            'content' => $request->content,
+            'user_id' => auth()->user()->id,
+            'photo' => $path ?? null,
         ]);
+        if (isset($request->tags)) {
+            foreach ($request->tags as $tag) {
+                $post->tags()->attach($tag);
+            }
+        }
+
+        return redirect()->route('posts.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($id)
     {
-        // dd($id);
-        // $post = Post::find($id);
         $post = Post::find((int) $id);
-        
         // dd($post);
-
-
-        return view('posts.show')->with(['post'=> $post]);
+        return view('posts.show')->with(['post' => $post]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $post = Post::find((int) $id);
+        return view('posts.edit')->with(['post' => $post]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request,  $id)
     {
-        //
+        $post = Post::find((int) $id);
+
+        if ($request->hasFile('photo')) {
+            if (isset($post->photo)) {
+                Storage::delete($post->photo);
+            }
+            $name = $request->file('photo')->getClientOriginalName();
+            $path = $request->file('photo')->storeAs('post-photos', $name);
+        }
+        $post->update([
+            'title' => $request->title,
+            'content' => $request->content,
+            'user_id' => auth()->user()->id,
+            'photo' => $request->photo ?? null,
+        ]);
+
+        return redirect()->route('posts.show')->with('pos', $post);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $post = Post::find((int) $id);
+
+        if ($post->photo) {
+            Storage::delete($post->photo);
+        }
+        $post->delete();
+
+        return redirect()->route('posts.index')->with('success', 'Successfully deleted post');
     }
 }

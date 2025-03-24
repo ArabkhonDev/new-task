@@ -14,9 +14,9 @@
             @foreach ($posts as $post)
                 <div class="min bg-gray-100 flex items-center justify-center p-4">
                     <div
-                        class="max-w-sm w-full bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all">
+                        class="max-w-sm min-w-sm w-full bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all">
                         <div class="relative">
-                            <img src="https://placehold.co/400x300" alt="Product" class="w-full h-52 object-cover" />
+                            <img src="{{ asset('storage/' . $post->photo) }}" alt="{{$post->title}}" class="w-full h-52 object-cover" />
                             <span
                                 class="absolute top-3 right-3 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium">
                                 Sale
@@ -31,7 +31,8 @@
 
                             <button 
                                 class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-lg transition-colors">
-                               <a href="{{route('posts.show', ['id', $post->id])}}">Read more</a>
+                               <a href="{{route('posts.show', $post->id)}}">Read more</a>
+
                             </button>
                         </div>
                     </div>
