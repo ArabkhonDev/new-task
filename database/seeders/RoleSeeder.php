@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
@@ -15,21 +16,26 @@ class RoleSeeder extends Seeder
             'create posts',
             'edit posts',
             'delete posts',
-            'view users',
-            'edit users',
             'manage users'
         ];
 
         foreach ($permissions as $permission) {
-            Permission::firstOrCreate(['name' => $permission]);
+            Permission::create(['name' => $permission]);
         }
 
-        // Rollarni yaratish
-        $admin = Role::firstOrCreate(['name' => 'admin']);
-        $writer = Role::firstOrCreate(['name' => 'writer']);
+        $adminRole = Role::create(['name' => 'admin']);
+        $writerRole = Role::create(['name' => 'writer']);
 
-        // Rollarga ruxsatlarni berish
-        $admin->givePermissionTo($permissions);
-        $writer->givePermissionTo(['create posts', 'edit posts', 'delete posts']);
+        $adminRole->givePermissionTo($permissions);
+        $writerRole->givePermissionTo(['create posts', 'edit posts']);
+
+        $admin = User::find(1);
+        $admin->assignRole($adminRole);
+
+        $writer = User::find(2);
+        $writer->assignRole($writerRole);
+
+        $writer2 = User::find(3);
+        $writer2->assignRole($writerRole);
     }
 }

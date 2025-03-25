@@ -16,7 +16,6 @@ class StorePostRequest extends FormRequest
         return [
             'title'=> 'required',
             'body'=>'required',
-            'user_id'=> 'required|integer',
             'photo'=>'required|mimes:jpg, png, jpeg|max:2048'
         ];
     }

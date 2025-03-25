@@ -20,8 +20,9 @@ class PostController extends Controller
         return view('posts.create');
     }
 
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
+
         if ($request->hasFile('photo')) {
             $name = $request->file('photo')->getClientOriginalName();
             $path = $request->file('photo')->storeAs('post-photos', $name);
@@ -38,14 +39,12 @@ class PostController extends Controller
                 $post->tags()->attach($tag);
             }
         }
-
         return redirect()->route('posts.index');
     }
 
     public function show($id)
     {
         $post = Post::find((int) $id);
-        // dd($post);
         return view('posts.show')->with(['post' => $post]);
     }
 
@@ -55,9 +54,9 @@ class PostController extends Controller
         return view('posts.edit')->with(['post' => $post]);
     }
 
-    public function update(Request $request,  $id)
+    public function update(StorePostRequest $request,  $id)
     {
-        $post = Post::find((int) $id);
+        $post = Post::find($id);
 
         if ($request->hasFile('photo')) {
             if (isset($post->photo)) {
@@ -78,7 +77,7 @@ class PostController extends Controller
 
     public function destroy($id)
     {
-        $post = Post::find((int) $id);
+        $post = Post::find($id);
 
         if ($post->photo) {
             Storage::delete($post->photo);

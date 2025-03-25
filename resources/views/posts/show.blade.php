@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 @auth
-                if(auth()->user()->id == $post->user_id)
+                    if(auth()->user()->id == $post->user_id)
                     <button class="btn btn-primary py-2 px-4 bg-gray-400 rounded mx-2"><a
                             href="{{ route('posts.edit', $post->id) }}"></a>Edit</button>
                     <form action="#" method="get" confirm("o'chirishga aminmisiz?")>
@@ -89,6 +89,7 @@
                             class="mb-3 w-full rounded-lg border border-gray-200 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             rows="4" placeholder="Your feedback...">
                 </textarea>
+                        <input type="hidden" name="post_id" value="{{ $post->id }}">
                         <button type="submit"
                             class="w-full rounded-lg bg-gray-900 py-2.5 text-sm font-medium text-white transition duration-300 hover:bg-gray-800">Submit</button>
                     </div>

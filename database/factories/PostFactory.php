@@ -9,15 +9,10 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class PostFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            'user_id'=> rand(1, 10),
+            'user_id'=> rand(1, 15),
             'title'=> $this->faker->sentence,
             'body'=> $this->faker->paragraph,
             'photo'=>$this->faker->url,

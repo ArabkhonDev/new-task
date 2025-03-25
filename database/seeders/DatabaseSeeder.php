@@ -10,16 +10,14 @@ use Spatie\Permission\Models\Permission;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
 
         $this->call([
-            RolePermissionSeeder::class,
             UserSeeder::class,
+            RoleSeeder::class,
             PostSeeder::class,
+            CommentSeeder::class,
         ]);
     }
 }

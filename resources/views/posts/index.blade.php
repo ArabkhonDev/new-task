@@ -6,9 +6,11 @@
     </x-slot>
 
     <div class="collection container m-auto mt-10">
-        <button 
-        class="w-[280px] bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-lg transition-colors">
-       <a href="{{route('posts.create')}}">Create Post</a>
+      @auth
+      <button 
+      class="w-[280px] bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-lg transition-colors">
+     <a href="{{route('posts.create')}}">Create Post</a>
+      @endauth
     </button>
         <div class="flex">
             @foreach ($posts as $post)
