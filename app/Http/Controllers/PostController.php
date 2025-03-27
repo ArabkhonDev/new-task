@@ -22,6 +22,9 @@ class PostController extends Controller
 
     public function store(StorePostRequest $request)
     {
+        if (!auth()->user()->hasRole(['admin', 'writer'])) {
+            abort(403, 'Sizga post yaratish taqiqlangan!');
+        }
 
         if ($request->hasFile('photo')) {
             $name = $request->file('photo')->getClientOriginalName();
@@ -42,21 +45,22 @@ class PostController extends Controller
         return redirect()->route('posts.index');
     }
 
-    public function show($id)
+    public function show(Post $post)
     {
-        $post = Post::find((int) $id);
+        dd($post);
         return view('posts.show')->with(['post' => $post]);
     }
 
-    public function edit($id)
+    public function edit(Post $post)
     {
-        $post = Post::find((int) $id);
+        dd($post);
+
         return view('posts.edit')->with(['post' => $post]);
     }
 
-    public function update(StorePostRequest $request,  $id)
+    public function update(StorePostRequest $request,  Post $post)
     {
-        $post = Post::find($id);
+        dd($post);
 
         if ($request->hasFile('photo')) {
             if (isset($post->photo)) {
@@ -75,9 +79,10 @@ class PostController extends Controller
         return redirect()->route('posts.show')->with('pos', $post);
     }
 
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        $post = Post::find($id);
+        dd($post);
+
 
         if ($post->photo) {
             Storage::delete($post->photo);

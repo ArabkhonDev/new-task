@@ -4,32 +4,37 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 })->name('index');
 
-// Route::get('/dashboard', [MainController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [MainController::class, 'dashboard'])->middleware(['auth'])->name('dashboard');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', [MainController::class, 'dashboard'])->name('dashboard');
-    Route::resources([
-        'posts'=> PostController::class,
-        'comments'=>CommentController::class
-    ]);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/comments', [CommentController::class, 'index'])->name('comments.index');
 });
 
-Route::get('/posts', [PostController::class,'index'])->name('posts.index');
-Route::get('posts/{post}', [PostController::class,'show'])->name('posts.show');
-Route::get('/comments', [CommentController::class,'index'])->name('comments.index');
+Route::middleware(['auth', 'role:admin|writer'])->group(function () {
+    Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
+    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    Route::put('posts/{posts}', [PostController::class,'update'])->name('posts.update');
+    Route::get('posts/{posts}/edit', [PostController::class,'edit'])->name('posts.edit');
+});
 
-// Route::get('/admin', function () {
-//     return "Admin Panel";
-// })->middleware('role:admin');
 
-// Route::get('/dashboard', function () {
-//     return "Dashboard";
-// })->middleware('role:admin,writer');
+Route::get('/posts/index', [PostController::class, 'index'])->name('posts.index');
+Route::get('posts/{post}', [PostController::class, 'show'])->name('posts.show');
 
-require __DIR__.'/auth.php';
+
+Route::prefix('admin')->group(function () {
+    Route::middleware(['auth', 'role:admin'])->group(function () {
+        Route::resource('users', UserController::class);
+        Route::delete('posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+    });
+});
+
+
+require __DIR__ . '/auth.php';

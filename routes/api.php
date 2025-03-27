@@ -9,7 +9,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resources([
+Route::apiResources([
     'posts'=> PostApiController::class,
     'users' => UserApiController::class,
 ]);

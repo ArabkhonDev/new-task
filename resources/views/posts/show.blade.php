@@ -27,7 +27,6 @@
                     </div>
                 </div>
 
-                <!-- Product Details -->
                 <div class="md:w-2/3 p-6">
                     <h1 class="text-2xl font-bold text-gray-800 mb-2">{{ $post->title }}</h1>
                     <p class="text-sm text-gray-600 mb-4">{{ $post->body }}</p>
@@ -37,14 +36,15 @@
                     </div>
                 </div>
                 @auth
-                    if(auth()->user()->id == $post->user_id)
                     <button class="btn btn-primary py-2 px-4 bg-gray-400 rounded mx-2"><a
                             href="{{ route('posts.edit', $post->id) }}"></a>Edit</button>
-                    <form action="#" method="get" confirm("o'chirishga aminmisiz?")>
-                        @method('delete')
-                        @csrf
-                        <button class="btn btn-primary py-2 px-4 bg-red-400 rounded">Delete</button>
-                    </form>
+                    @can('delete post')
+                        <form action="#" method="post" confirm("o'chirishga aminmisiz?")>
+                            @method('delete')
+                            @csrf
+                            <button class="btn btn-primary py-2 px-4 bg-red-400 rounded">Delete</button>
+                        </form>
+                    @endcan
                 @endauth
             </div>
         </div>

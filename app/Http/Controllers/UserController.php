@@ -11,6 +11,8 @@ class UserController extends Controller
     {
         $user = User::find(1);
         $user->assignRole('admin');
+
+        return 'salom admin';
     }
 
     /**

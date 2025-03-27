@@ -12,7 +12,7 @@ class MainController extends Controller
     }
 
     public function dashboard(){
-        $posts = Post::orderBy("created_at","desc")->cursorPaginate(5);
+        $posts = Post::orderBy("id","desc")->cursorPaginate(5);
         return view("dashboard")->with(["posts"=> $posts]);
     }
 }
